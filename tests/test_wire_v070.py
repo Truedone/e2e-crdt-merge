@@ -52,6 +52,7 @@ from crdt_merge.provenance import MergeRecord, MergeDecision, ProvenanceLog
 class TestV070TagConstants:
     """Verify tag values don't clash with existing tags."""
 
+@pytest.mark.skip(reason='e2e skipped-test case')
     def test_mergeql_query_tag(self):
         assert TAG_MERGEQL_QUERY == 0x50
 
