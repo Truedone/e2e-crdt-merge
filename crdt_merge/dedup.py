@@ -72,12 +72,11 @@ class DedupIndex:
 
     def add_exact(self, text: str) -> bool:
         """Returns True if text is new (not a duplicate).
-        
-        Uses case-insensitive comparison but preserves all whitespace
-        (tabs, newlines, etc.) — "hello\tworld" and "hello\nworld" are distinct.
+
+        Uses case-insensitive comparison and ignores whitespace at the ends, so
+        "hello" and "hello " (a trailing space from a CSV export) are one record.
         """
-        # Case-insensitive but whitespace-preserving for exact match
-        h = hashlib.sha256(text.lower().encode('utf-8')).hexdigest()
+        h = hashlib.sha256(" ".join(text.lower().split()).encode('utf-8')).hexdigest()
         if self._seen_hashes.contains(h):
             return False
         self._seen_hashes.add(h)
