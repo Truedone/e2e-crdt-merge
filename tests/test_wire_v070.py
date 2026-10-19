@@ -25,6 +25,19 @@ types serialize and deserialize correctly, including compression.
 
 import pytest
 
+from crdt_merge.wire import WireError
+
+
+@pytest.mark.parametrize("data", [
+    b"CRDT" + (1).to_bytes(2, "big") + b"\x00" + b"\x00" + (0).to_bytes(4, "big"),
+    b"CRDT" + (1).to_bytes(2, "big") + b"\x00" + b"\x00" + (0).to_bytes(4, "big") + b"deadbeef",
+    b"CRDT" + (1).to_bytes(2, "big") + b"\x7f" + b"\x00" + (0).to_bytes(4, "big"),
+], ids=["zero length", "trailing garbage", "unknown tag"])
+def test_deserialize_raises_wire_error_on_corrupted_frames(data):
+    with pytest.raises(WireError):
+        deserialize(data)
+
+
 from crdt_merge.wire import (
     serialize,
     deserialize,

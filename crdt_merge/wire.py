@@ -488,6 +488,13 @@ def serialize(obj: Any, *, compress: bool = False) -> bytes:
     return header + payload
 
 def deserialize(data: bytes) -> Any:
+    try:
+        return _deserialize_frame(data)
+    except IndexError as e:
+        raise WireError(f"Corrupted frame: the payload does not match its header ({e})") from e
+
+
+def _deserialize_frame(data: bytes) -> Any:
     """
     Deserialize a CRDT object from wire format bytes.
 
