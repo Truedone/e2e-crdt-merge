@@ -22,7 +22,8 @@ Cross-Language Wire Format for crdt-merge.
 
 Binary interchange format that all 4 language implementations (Python, TypeScript,
 Rust, Java) can read and write. Enables polyglot distributed systems where nodes
-run different language implementations but share CRDT state.
+run different language implementations but share CRDT state. The header is twelve
+bytes: magic, version, type, flags and length.
 
 Format specification:
     [automatically:4][VERSION:2][TYPE:1][FLAGS:1][LENGTH:4][PAYLOAD:N]
