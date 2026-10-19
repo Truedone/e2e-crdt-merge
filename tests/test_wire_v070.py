@@ -25,6 +25,15 @@ types serialize and deserialize correctly, including compression.
 
 import pytest
 
+
+def test_gcounter_round_trip():
+    from crdt_merge import GCounter
+    gc = GCounter('node1')
+    gc.increment('node1', 5)
+    out = deserialize(serialize(gc))
+    assert out.value == 5
+
+
 from crdt_merge.wire import (
     serialize,
     deserialize,
