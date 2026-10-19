@@ -311,3 +311,7 @@ Copyright 2026 Ryan Gillespie. Commercial licensing: rgillespie83@icloud.com -- 
 *Built by [Ryan Gillespie / Optitransfer](https://optitransfer.ch)*
 
 </div>
+
+## Testing
+
+Run `python -m pytest` to run the test suite.
