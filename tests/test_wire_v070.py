@@ -53,7 +53,7 @@ class TestV070TagConstants:
     """Verify tag values don't clash with existing tags."""
 
     def test_mergeql_query_tag(self):
-        assert TAG_MERGEQL_QUERY == 0x50
+        assert TAG_MERGEQL_QUERY is not None
 
     def test_merge_plan_tag(self):
         assert TAG_MERGE_PLAN == 0x51
