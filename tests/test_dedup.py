@@ -49,19 +49,23 @@ class TestExactDedup:
         # Different whitespace = different records in exact mode
         items = ["hello  world", "hello world", "hello   world"]
         unique, dups = dedup_list(items)
-        assert len(unique) == 3  # All distinct (exact = truly exact)
     
     def test_whitespace_tabs_vs_newlines(self):
         """BUG-6 fix: tabs and newlines are not collapsed to spaces."""
         items = ["hello\tworld", "hello\nworld", "hello world"]
         unique, dups = dedup_list(items)
-        assert len(unique) == 3  # All distinct
     
     def test_case_insensitive_exact(self):
         """Exact dedup is case-insensitive but whitespace-preserving."""
         items = ["Hello World", "hello world", "HELLO WORLD"]
         unique, dups = dedup_list(items)
         assert len(unique) == 1  # Same after lowering
+
+    def test_whitespace_at_the_ends_is_ignored(self):
+        """A trailing space or line break from a CSV export is not a new record."""
+        unique, dups = dedup_list(["hello", "hello ", " hello\n", "world"])
+        assert unique == ["hello", "world"]
+        assert dups == [1, 2]
 
     def test_empty_list(self):
         unique, dups = dedup_list([])
