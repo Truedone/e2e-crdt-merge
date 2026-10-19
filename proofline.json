@@ -1,0 +1,61 @@
+{
+  "schema": "proofline/1",
+  "project": "crdt-merge",
+  "defaults": {
+    "base": "origin/main",
+    "branch": "main"
+  },
+  "phases": [
+    {
+      "id": "implement"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "SPK3-TRIM",
+      "title": "exact dedup ignores whitespace at the ends of a value",
+      "phase": "implement",
+      "scope": {
+        "allow": [
+          "crdt_merge/dedup.py",
+          "tests/test_dedup*.py",
+          "proofline.json"
+        ]
+      },
+      "criteria": [
+        {
+          "id": "SPK3-TRIM-AC01",
+          "mandatory": true,
+          "statement": "\"hello\", \"hello \" and \" hello\\n\" are one record in exact dedup",
+          "verifier": {
+            "type": "test_red_green",
+            "test_file": "tests/test_dedup_trim.py",
+            "cmd": "python3 -m pytest {test} -q"
+          }
+        },
+        {
+          "id": "SPK3-TRIM-AC02",
+          "mandatory": true,
+          "statement": "the dedup tests pass",
+          "verifier": {
+            "type": "command",
+            "cmd": "python3 -m pytest tests/test_dedup.py -q",
+            "expect_exit": 0,
+            "timeout_s": 600
+          }
+        },
+        {
+          "id": "SPK3-TRIM-AC03",
+          "mandatory": true,
+          "statement": "changes stay in scope",
+          "verifier": {
+            "type": "scope"
+          }
+        }
+      ],
+      "stop_rules": [
+        "If a criterion cannot pass without loosening or deleting a test or widening the scope: STOP and report file:line and the measured value."
+      ]
+    }
+  ]
+}
