@@ -142,4 +142,15 @@ def merge_json_lines(
             result.append(merge_dicts(ra, rb))
         else:
             result.append(ra or rb)
+
+    # A record with no value for the key cannot be matched. It is kept, after the
+    # matched records, once (as the no-key merge dedups), instead of being dropped,
+    # so merging a dataset with itself returns it whole.
+    seen = set()
+    for line in lines_a + lines_b:
+        if line.get(key) is None:
+            k = _list_item_key(line)
+            if k not in seen:
+                seen.add(k)
+                result.append(line)
     return result
